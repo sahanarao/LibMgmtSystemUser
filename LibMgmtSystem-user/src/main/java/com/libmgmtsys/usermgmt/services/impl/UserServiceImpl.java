@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByUserName(String userName) {
+    public String findByUserName(String userName) {
         return userRepository.findByUserName(userName);
     }
 
@@ -40,15 +40,20 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User findUser(String userName, String password) {
 		// TODO Auto-generated method stub
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		User user = new User();
-		List<Object[]> res = userRepository.findUser(userName, password);
+		List<Object[]> res = userRepository.findUser(userName);
 		Iterator<Object[]> it = res.iterator();
 		while(it.hasNext()){
-			Object[] line = it.next();
-			
+			Object[] line = it.next();			
 			user.setId((Long) line[0]);
 			user.setRole((Role) line[1]);
+			user.setPassword((String) line[2]);
 		}
-		return user;
+		if(passwordEncoder.matches(password, user.getPassword())){
+			System.out.println("Password matched");
+			return user;
+		}
+		return null;
 	}
 }

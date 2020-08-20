@@ -7,7 +7,7 @@ import com.libmgmtsys.usermgmt.model.User;
 public interface UserService {
     void saveUser(User user);
 
-    User findByUserName(String userName);
+    String findByUserName(String userName);
 
     List<String> findUsers(List<Long> idList);
     

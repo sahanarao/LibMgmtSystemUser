@@ -3,6 +3,7 @@ package com.libmgmtsys.usermgmt.controllers;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,8 @@ import com.libmgmtsys.usermgmt.model.Role;
 import com.libmgmtsys.usermgmt.model.User;
 import com.libmgmtsys.usermgmt.services.UserService;
 
+
+
 @RestController
 public class UserController {
 
@@ -27,13 +30,20 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/service/registration")
-    public ResponseEntity<?> register(@RequestBody User user) {
-        if (userService.findByUserName(user.getUserName()) != null) {
+    public ResponseEntity<?> register(@RequestBody List<User> user) {
+    	User userData = new User();
+    	for(User usr:user) {
+    		userData.setFirstName(usr.getFirstName());
+    		userData.setLastName(usr.getLastName());
+    		userData.setUserName(usr.getUserName());
+    		userData.setPassword(usr.getPassword());
+    	}
+        if (userService.findByUserName(userData.getUserName()) != null) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
-        user.setRole(Role.USER);
-        userService.saveUser(user);
+        userData.setRole(Role.USER);
+        userService.saveUser(userData);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -43,7 +53,8 @@ public class UserController {
             return ResponseEntity.ok(principal);
         }
 
-        return new ResponseEntity<User>(userService.findByUserName(principal.getName()), HttpStatus.OK);
+       // return new ResponseEntity<User>(userService.findByUserName(principal.getName()), HttpStatus.OK);
+        return null;
     }
 
     @PostMapping("/service/names")
