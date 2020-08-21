@@ -36,7 +36,7 @@ public class BasicAuthConfiguration extends WebSecurityConfigurerAdapter {
           .authorizeRequests()
           .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
           .antMatchers("/login").permitAll()
-          .antMatchers("/service/registration").permitAll()
+          .antMatchers("/service/*").permitAll()
           .anyRequest()
           .authenticated()
           .and()

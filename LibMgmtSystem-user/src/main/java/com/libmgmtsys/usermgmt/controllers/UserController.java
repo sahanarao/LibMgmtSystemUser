@@ -3,7 +3,6 @@ package com.libmgmtsys.usermgmt.controllers;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,35 +46,25 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/api/user/services/user")
-    public ResponseEntity<?> getUser(Principal principal) {
-        if (principal == null || principal.getName() == null) {
-            return ResponseEntity.ok(principal);
-        }
 
-       // return new ResponseEntity<User>(userService.findByUserName(principal.getName()), HttpStatus.OK);
-        return null;
-    }
-
-    @PostMapping("/service/names")
-    public ResponseEntity<?> getUsers(@RequestBody List<Long> idList) {
-        return ResponseEntity.ok(userService.findUsers(idList));
+    @GetMapping("/service/users")
+    public List<User> getUsers() {
+        return userService.findUsers();
     }
     
-   
+    @PostMapping("/service/delete")
+    public void delUsers(@RequestBody List<User> users) {
+        userService.deleteAll(users);
+
+    }
     
     @PostMapping("/login")
     public List<User> login(@RequestBody List<User> idList) {
     	List<User> list = new ArrayList<User>();
-    	System.out.println("In Loginnnn");
-    	System.out.println("idList is:"+idList);
     	String userName = idList.iterator().next().getUserName();
     	String password = idList.iterator().next().getPassword();
-    	System.out.println("UserName:"+userName);
-    	System.out.println("Password"+password);
     	User userdata = userService.findUser(userName,password);
     	list.add(userdata);
-    	System.out.println(list);
         return list;
     }
     
