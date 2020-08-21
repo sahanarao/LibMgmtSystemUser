@@ -77,6 +77,8 @@ public class UserServiceImpl implements UserService {
 	public void deleteAll(List<User> usr) {
 		// TODO Auto-generated method stub
 		logger.info("Delete User invoked");
+    	 Long uid = usr.iterator().next().getId();
+    	 userRepository.delBorrowDetails(String.valueOf(uid));
 		userRepository.deleteAll(usr);
 		
 	}
